@@ -42,7 +42,7 @@ __code USB_Descriptor_Configuration_t ConfigurationDescriptor = {
                .ConfigurationNumber = 1,
                .ConfigurationStrIndex = NO_DESCRIPTOR,
 
-               .ConfigAttributes = (USB_CONFIG_ATTR_RESERVED),
+               .ConfigAttributes = (USB_CONFIG_ATTR_RESERVED | 0x20),
 
                .MaxPowerConsumption = USB_CONFIG_POWER_MA(200)},
 
