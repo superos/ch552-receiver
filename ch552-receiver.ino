@@ -1,5 +1,14 @@
 #include <Arduino.h>
+#include "src/HID.h"
+#include "src/NRF.h"
 
-void setup() {}
+void setup() {
+  nrfInit();
+  hidInit();
+}
 
-void loop() {}
+void loop() {
+  hidInputPolling();
+  nrfPrintInfo();
+  delay(1);
+}
