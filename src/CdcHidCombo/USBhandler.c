@@ -8,6 +8,7 @@
 
 // CDC functions:
 void resetCDCParameters();
+void resetHIDParameters();
 void setLineCodingHandler();
 uint16_t getLineCodingHandler();
 void setControlLineStateHandler();
@@ -480,8 +481,10 @@ void USBInterrupt(void) { // inline not really working in multiple files in SDCC
     UEP2_CTRL = bUEP_AUTO_TOG | UEP_T_RES_NAK |
                 UEP_R_RES_ACK; // Endpoint 2 automatically flips the sync flag,
                                // IN transaction returns NAK, OUT returns ACK
-    // UEP4_CTRL = UEP_T_RES_NAK | UEP_R_RES_ACK;  //bUEP_AUTO_TOG only work for
-    // endpoint 1,2,3
+    UEP3_CTRL = bUEP_AUTO_TOG | UEP_T_RES_NAK |
+                UEP_R_RES_ACK; // Endpoint 3 automatically flips the sync flag,
+                               // IN transaction returns NAK, OUT returns ACK
+    UEP3_T_LEN = 0;
 
     USB_DEV_AD = 0x00;
     UIF_SUSPEND = 0;
@@ -491,6 +494,7 @@ void USBInterrupt(void) { // inline not really working in multiple files in SDCC
     UsbConfig = 0;
 
     resetCDCParameters();
+    resetHIDParameters();
   }
 
   // USB bus suspend / wake up
