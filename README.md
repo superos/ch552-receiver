@@ -10,8 +10,8 @@
 
 1. from [`CH55xDuino`](https://github.com/DeqingSun/ch55xduino) library [`examples\05.USB\CdcHidCombo\src\CdcHidCombo`](https://github.com/DeqingSun/ch55xduino/tree/ch55xduino/ch55xduino/ch55x/libraries/Generic_Examples/examples/05.USB/CdcHidCombo/src/CdcHidCombo)
 
-2. input reports handle with arduino `hidInputPolling` @ch552-receiver.ino loop()
+2. input reports handle with HID.c `hidInputPolling` @[*loop()*](/ch552-receiver.ino#L10)
 
-3. output reports handle with HID.c `hidOutputCallback` @USBhandler.c USB_EP0_OUT()
+3. output reports handle with HID.c `hidOutputCallback` @[*USB_EP0_OUT()*](/src/CdcHidCombo/USBhandler.c#L349)
 
 4. all changes? `git log --oneline -- src/CdcHidCombo`
