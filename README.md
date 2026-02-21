@@ -15,3 +15,6 @@
 3. output reports handle with HID.c `hidOutputCallback` @[*USB_EP0_OUT()*](/src/CdcHidCombo/USBhandler.c#L349)
 
 4. all changes? `git log --oneline -- src/CdcHidCombo`
+
+### Other Receivers
+- [wagiminator/CH552-USB-NRF](https://github.com/wagiminator/CH552-USB-NRF)
