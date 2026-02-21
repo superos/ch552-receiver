@@ -231,6 +231,13 @@ uint8_t Keyboard_press(__data uint8_t k) {
   return 1;
 }
 
+void resetHIDParameters() {
+  UpPoint3_Busy = 0;
+  for (__data uint8_t i = 0; i < sizeof(HIDKey); i++) {
+    HIDKey[i] = 0;
+  }
+}
+
 uint8_t Keyboard_release(__data uint8_t k) {
   __data uint8_t i;
   if (k >= 136) { // it's a non-printing key (not a modifier)
