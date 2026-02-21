@@ -8,7 +8,7 @@
 
 ### CdcHidCombo
 
-1. from `CH55xDuino` library `examples\05.USB\CdcHidCombo\src\CdcHidCombo`
+1. from [`CH55xDuino`](https://github.com/DeqingSun/ch55xduino) library [`examples\05.USB\CdcHidCombo\src\CdcHidCombo`](https://github.com/DeqingSun/ch55xduino/tree/ch55xduino/ch55xduino/ch55x/libraries/Generic_Examples/examples/05.USB/CdcHidCombo/src/CdcHidCombo)
 
 2. input reports handle with arduino `hidInputPolling` @ch552-receiver.ino loop()
 
