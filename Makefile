@@ -1,26 +1,22 @@
 # CH552 Makefile for CH55xDuino
 # Fully mimics Arduino IDE compilation process
-
-# Windows Only
-APPDATA_LOCAL = C:/Users/[USER_NAME]/AppData/Local
-ARDUINO_BUILD_TEMP = CH55xDuino_mcs51_ch552_usb_settings_user266_9f1c75ba7cb2da0b34c95f3f255f4f76
+# compile with Arduino to create core.lib cache before using Makefile
+AppData = C:/Users/$(USERNAME)/AppData/Local
+CH55xDuino = $(AppData)/Arduino15/packages/CH55xDuino
+CH55x_CORE_LIB = `ls -t $(AppData)/arduino/cores/CH55xDuino_mcs51_*/core.lib | head -n 1`
 
 # Project name
 PROJECT = ch552-receiver
 
 # Paths
-ARDUINO15 = $(APPDATA_LOCAL)/Arduino15
-CH55X_ROOT = $(ARDUINO15)/packages/CH55xDuino/hardware/mcs51/0.0.25
-TOOLS_ROOT = $(ARDUINO15)/packages/CH55xDuino/tools
-MCS51_TOOLS = $(TOOLS_ROOT)/MCS51Tools/2023.10.10
-SDCC_ROOT = $(TOOLS_ROOT)/sdcc/build.13407_4
-CORE_LIB = $(APPDATA_LOCAL)/arduino/cores/$(ARDUINO_BUILD_TEMP)/core.lib
-
-# Tools (using busybox wrapper like Arduino IDE)
-BUSYBOX = $(MCS51_TOOLS)/win/busybox
-SDCC_WRAPPER = $(MCS51_TOOLS)/wrapper/sdcc.sh
-SDCC_BIN = $(SDCC_ROOT)/bin/sdcc
-SDLD_BIN = $(SDCC_ROOT)/bin/sdld
+CH55x	 = $(CH55xDuino)/hardware/mcs51/0.0.25
+BUSYBOX  = $(CH55xDuino)/tools/MCS51Tools/2023.10.10/win/busybox
+WRAPPER  = $(CH55xDuino)/tools/MCS51Tools/2023.10.10/wrapper/sdcc.sh
+SDCC     = $(CH55xDuino)/tools/sdcc/build.13407_4
+SDCC_INC = $(SDCC)/include
+SDCC_LIB = $(SDCC)/lib
+SDCC_BIN = $(SDCC)/bin/sdcc
+SDLD_BIN = $(SDCC)/bin/sdld
 
 # Build directory
 BUILD_DIR = build
@@ -59,9 +55,9 @@ CFLAGS = \
 
 # Include paths
 INCLUDES = \
-	-I$(CH55X_ROOT)/cores/ch55xduino \
-	-I$(CH55X_ROOT)/variants/ch552 \
-	-I$(SDCC_ROOT)/include
+	-I$(CH55x)/cores/ch55xduino \
+	-I$(CH55x)/variants/ch552 \
+	-I$(SDCC_INC)
 
 # Object files (all in build directory)
 SKETCH_OBJ = $(BUILD_DIR)/$(SKETCH_SRC).c.rel
@@ -86,40 +82,40 @@ $(BUILD_DIR)/$(SKETCH_SRC).c: $(SKETCH_SRC)
 # Compile sketch using busybox wrapper (mimicking Arduino IDE)
 $(BUILD_DIR)/$(SKETCH_SRC).c.rel: $(BUILD_DIR)/$(SKETCH_SRC).c
 	@echo Compiling $(SKETCH_SRC)...
-	@cd $(BUILD_DIR) && $(BUSYBOX) ash $(SDCC_WRAPPER) $(SDCC_BIN) $(notdir $<) $(notdir $@) re2 $(CFLAGS) $(INCLUDES) -I..
+	@cd $(BUILD_DIR) && $(BUSYBOX) ash $(WRAPPER) $(SDCC_BIN) $(notdir $<) $(notdir $@) re2 $(CFLAGS) $(INCLUDES) -I..
 
 # Compile C files using busybox wrapper
 $(BUILD_DIR)/USBCDC.c.rel: src/CdcHidCombo/USBCDC.c
 	@echo Compiling $<...
-	@$(BUSYBOX) ash $(SDCC_WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
+	@$(BUSYBOX) ash $(WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
 
 $(BUILD_DIR)/NRF.c.rel: src/NRF.c
 	@echo Compiling $<...
-	@$(BUSYBOX) ash $(SDCC_WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
+	@$(BUSYBOX) ash $(WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
 
 $(BUILD_DIR)/HID.c.rel: src/HID.c
 	@echo Compiling $<...
-	@$(BUSYBOX) ash $(SDCC_WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
+	@$(BUSYBOX) ash $(WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
 
 $(BUILD_DIR)/LED.c.rel: src/LED.c
 	@echo Compiling $<...
-	@$(BUSYBOX) ash $(SDCC_WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
+	@$(BUSYBOX) ash $(WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
 
 $(BUILD_DIR)/RF24.c.rel: src/RF24/RF24.c
 	@echo Compiling $<...
-	@$(BUSYBOX) ash $(SDCC_WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
+	@$(BUSYBOX) ash $(WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
 
 $(BUILD_DIR)/USBconstant.c.rel: src/CdcHidCombo/USBconstant.c
 	@echo Compiling $<...
-	@$(BUSYBOX) ash $(SDCC_WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
+	@$(BUSYBOX) ash $(WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
 
 $(BUILD_DIR)/USBhandler.c.rel: src/CdcHidCombo/USBhandler.c
 	@echo Compiling $<...
-	@$(BUSYBOX) ash $(SDCC_WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
+	@$(BUSYBOX) ash $(WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
 
 $(BUILD_DIR)/USBHIDKeyboard.c.rel: src/CdcHidCombo/USBHIDKeyboard.c
 	@echo Compiling $<...
-	@$(BUSYBOX) ash $(SDCC_WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
+	@$(BUSYBOX) ash $(WRAPPER) $(SDCC_BIN) $< $@ re1 $(CFLAGS) $(INCLUDES)
 
 # Generate linker script (mimicking Arduino IDE)
 $(LINK_SCRIPT): $(ALL_OBJS)
@@ -135,8 +131,8 @@ $(LINK_SCRIPT): $(ALL_OBJS)
 	@echo "-b ISEG=0x0000" >> $@
 	@echo "-b BSEG=0x0000" >> $@
 	@echo "-k $(BUILD_DIR)" >> $@
-	@echo "-k $(SDCC_ROOT)/lib/large_int_calc_stack_auto" >> $@
-	@echo "-l $(CORE_LIB)" >> $@
+	@echo "-k $(SDCC_LIB)/large_int_calc_stack_auto" >> $@
+	@echo "-l $(CH55x_CORE_LIB)" >> $@
 	@echo "-l mcs51" >> $@
 	@echo "-l libsdcc" >> $@
 	@echo "-l liblong" >> $@
