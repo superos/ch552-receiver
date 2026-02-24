@@ -1,10 +1,8 @@
 ### Makefile
 
-1. open project with arduino ide, compile it, you will get `core.lib`
+1. open project with arduino ide, compile it, you will get `core.lib` cache file
 
-2. edit `Makefile` with correct path of `APPDATA_LOCAL` and `ARDUINO_BUILD_TEMP`
-
-3. you can use `Makefile` inside `VSCode` from now on.
+2. you can use `Makefile` inside `VSCode` from now on.
 
 ### CdcHidCombo
 
